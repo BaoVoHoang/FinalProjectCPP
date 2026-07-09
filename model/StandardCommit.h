@@ -17,6 +17,9 @@ class StandardCommit : public Commit {
         ~StandardCommit();
         void displayCommit() override;
         string getSummary() override;
+
+        map<string, string> getFileSnapshots();
+        void setFileSnapshots(map<string, string> fileSnapshots);
 };
 
 #endif // STANDARDCOMMIT_H
