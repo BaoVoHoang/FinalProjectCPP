@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named FinalProject
+# Target rules for targets named FinalProjectCPP
 
 # Build rule for target.
-FinalProject: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 FinalProject
-.PHONY : FinalProject
+FinalProjectCPP: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 FinalProjectCPP
+.PHONY : FinalProjectCPP
 
 # fast build rule for target.
-FinalProject/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/build
-.PHONY : FinalProject/fast
+FinalProjectCPP/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/build
+.PHONY : FinalProjectCPP/fast
 
 main.o: main.cpp.o
 .PHONY : main.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -142,7 +142,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -150,7 +150,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 model/Commit.o: model/Commit.cpp.o
@@ -158,7 +158,7 @@ model/Commit.o: model/Commit.cpp.o
 
 # target to build an object file
 model/Commit.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/Commit.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Commit.cpp.o
 .PHONY : model/Commit.cpp.o
 
 model/Commit.i: model/Commit.cpp.i
@@ -166,7 +166,7 @@ model/Commit.i: model/Commit.cpp.i
 
 # target to preprocess a source file
 model/Commit.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/Commit.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Commit.cpp.i
 .PHONY : model/Commit.cpp.i
 
 model/Commit.s: model/Commit.cpp.s
@@ -174,7 +174,7 @@ model/Commit.s: model/Commit.cpp.s
 
 # target to generate assembly for a file
 model/Commit.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/Commit.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Commit.cpp.s
 .PHONY : model/Commit.cpp.s
 
 model/DiffEngine.o: model/DiffEngine.cpp.o
@@ -182,7 +182,7 @@ model/DiffEngine.o: model/DiffEngine.cpp.o
 
 # target to build an object file
 model/DiffEngine.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/DiffEngine.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/DiffEngine.cpp.o
 .PHONY : model/DiffEngine.cpp.o
 
 model/DiffEngine.i: model/DiffEngine.cpp.i
@@ -190,7 +190,7 @@ model/DiffEngine.i: model/DiffEngine.cpp.i
 
 # target to preprocess a source file
 model/DiffEngine.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/DiffEngine.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/DiffEngine.cpp.i
 .PHONY : model/DiffEngine.cpp.i
 
 model/DiffEngine.s: model/DiffEngine.cpp.s
@@ -198,7 +198,7 @@ model/DiffEngine.s: model/DiffEngine.cpp.s
 
 # target to generate assembly for a file
 model/DiffEngine.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/DiffEngine.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/DiffEngine.cpp.s
 .PHONY : model/DiffEngine.cpp.s
 
 model/StandardCommit.o: model/StandardCommit.cpp.o
@@ -206,7 +206,7 @@ model/StandardCommit.o: model/StandardCommit.cpp.o
 
 # target to build an object file
 model/StandardCommit.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/StandardCommit.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/StandardCommit.cpp.o
 .PHONY : model/StandardCommit.cpp.o
 
 model/StandardCommit.i: model/StandardCommit.cpp.i
@@ -214,7 +214,7 @@ model/StandardCommit.i: model/StandardCommit.cpp.i
 
 # target to preprocess a source file
 model/StandardCommit.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/StandardCommit.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/StandardCommit.cpp.i
 .PHONY : model/StandardCommit.cpp.i
 
 model/StandardCommit.s: model/StandardCommit.cpp.s
@@ -222,7 +222,7 @@ model/StandardCommit.s: model/StandardCommit.cpp.s
 
 # target to generate assembly for a file
 model/StandardCommit.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/StandardCommit.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/StandardCommit.cpp.s
 .PHONY : model/StandardCommit.cpp.s
 
 model/TrackedFile.o: model/TrackedFile.cpp.o
@@ -230,7 +230,7 @@ model/TrackedFile.o: model/TrackedFile.cpp.o
 
 # target to build an object file
 model/TrackedFile.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/TrackedFile.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/TrackedFile.cpp.o
 .PHONY : model/TrackedFile.cpp.o
 
 model/TrackedFile.i: model/TrackedFile.cpp.i
@@ -238,7 +238,7 @@ model/TrackedFile.i: model/TrackedFile.cpp.i
 
 # target to preprocess a source file
 model/TrackedFile.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/TrackedFile.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/TrackedFile.cpp.i
 .PHONY : model/TrackedFile.cpp.i
 
 model/TrackedFile.s: model/TrackedFile.cpp.s
@@ -246,7 +246,7 @@ model/TrackedFile.s: model/TrackedFile.cpp.s
 
 # target to generate assembly for a file
 model/TrackedFile.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/TrackedFile.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/TrackedFile.cpp.s
 .PHONY : model/TrackedFile.cpp.s
 
 model/Validator.o: model/Validator.cpp.o
@@ -254,7 +254,7 @@ model/Validator.o: model/Validator.cpp.o
 
 # target to build an object file
 model/Validator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/Validator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Validator.cpp.o
 .PHONY : model/Validator.cpp.o
 
 model/Validator.i: model/Validator.cpp.i
@@ -262,7 +262,7 @@ model/Validator.i: model/Validator.cpp.i
 
 # target to preprocess a source file
 model/Validator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/Validator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Validator.cpp.i
 .PHONY : model/Validator.cpp.i
 
 model/Validator.s: model/Validator.cpp.s
@@ -270,7 +270,7 @@ model/Validator.s: model/Validator.cpp.s
 
 # target to generate assembly for a file
 model/Validator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProject.dir/build.make CMakeFiles/FinalProject.dir/model/Validator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Validator.cpp.s
 .PHONY : model/Validator.cpp.s
 
 # Help Target
@@ -281,7 +281,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... FinalProject"
+	@echo "... FinalProjectCPP"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

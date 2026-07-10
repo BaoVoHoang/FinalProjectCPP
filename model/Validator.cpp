@@ -5,7 +5,7 @@
 using namespace std;
 
 // trims the leading and trailing spaces from a string
-string trim (const::string &name) {
+string Validator::trim (const::string &name) {
     const auto start = name.find_first_not_of(' ');
     const auto end = name.find_last_not_of(' ');
     return name.substr(start, end - start + 1);
