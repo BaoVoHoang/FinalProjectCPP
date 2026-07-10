@@ -1,8 +1,11 @@
 #ifndef TRACKEDFILE_H
 #define TRACKEDFILE_H
+#include <utility>
+
 #include "string"
 using namespace std;
 
+// Simple enum denoting a TrackedFile's status
 enum class Status {
     Modified,
     Staged,
@@ -10,30 +13,32 @@ enum class Status {
     Error
 };
 
-inline string statusToString(const Status status) {
-    switch (status) {
-        case Status::Modified : return "Modified";
-        case Status::Staged   : return "Staged";
-        case Status::Committed: return "Committed";
-        case Status::Error    : return "Error";
-        default               : return "Error";
-    }
-}
+/* NOTE: While there is an Error enum, see the following:
+ * anything not identified as Modified|Staged|Committed will automatically be defined as an Error.
+ * Careful with that. If you want that changed so that the Error enum is only used for actual errors
+ * just let me know and I'll flesh it out a bit more.
+ */
+string statusToString(Status status);
 
-inline Status statusFromString(const string status) {
-    if (status.compare("Modified") == 0) return Status::Modified;
-    if (status.compare("Staged") == 0) return Status::Modified;
-    if (status.compare("Committed") == 0) return Status::Modified;
-    return Status::Error;
-}
+// NOTE: See above for note on Error
+Status statusFromString(const string& status);
 
+/* Represents a single file under version control.
+ *
+ * Holds the file's path, its current content, and its byte size, along with
+ * a Status (Modified / Staged / Committed / Error) tracking where the file
+ * sits in the commit workflow. Content and size are kept in sync via
+ * setContent/updateContent.
+ *
+ */
 class TrackedFile {
     string path, content;
     int size;
     Status status;
 
 public:
-    TrackedFile(string path, string content) : path(path), content(content), status() {}
+    // size is derived from content; a freshly tracked file starts out Modified.
+    TrackedFile(string path, const string& content);
 
     void   updateContent(const string& content);
     void   displayFileInfo();
@@ -45,13 +50,9 @@ public:
     Status getStatus() const { return status; }
 
     // setters
-    void   setStatus  (const Status status) { this->status = status; }
-    void   setSize    (int size)            { this->size = size; }
-    void   setPath    (string path)         { this->path = path; }
-    void   setContent (string content) {
-        this->content = content;
-        // implicitly converts unsigned double into signed int, which could cause problems. Too bad!
-        this->setSize(content.size());
-    }
+    void setStatus  (const Status nStatus) { this->status = nStatus; }
+    void setSize    (const int nSize)            { this->size = nSize; }
+    void setPath    (const string &nPath)         { this->path = nPath; }
+    void setContent (const string& nContent);
 };
 #endif

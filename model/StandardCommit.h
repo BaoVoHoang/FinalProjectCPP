@@ -2,11 +2,21 @@
 #define STANDARDCOMMIT_H
 #include "Commit.h"
 #include <map>
+#include <utility>
 
+
+/* Concrete Commit implementation used for ordinary commits.
+ *
+ * Extends the abstract Commit with a snapshot of every tracked file's
+ * contents at commit time (fileSnapshots maps file path -> file content),
+ * and implements the display/summary behaviour required by the base class.
+ *
+ */
 class StandardCommit : public Commit {
-    private:
-        // maps path -> content
-        map<string, string> fileSnapshots;
+
+    // maps path -> content
+    map<string, string> fileSnapshots;
+
     public:
         StandardCommit(
             string author,
@@ -14,12 +24,14 @@ class StandardCommit : public Commit {
             string timestamp,
             string commitID
         );
+
         ~StandardCommit() override;
         void displayCommit() override;
-        string getSummary() override;
+        // TODO: currently is exact same as base class, should implement to consider extra info in concrete class
+        string getSummary() const override {return "COMMIT-"+commitID+"-"+message+"-"+"author";}
 
-        map<string, string> getFileSnapshots();
-        void setFileSnapshots(map<string, string> fileSnapshots);
+        map<string, string> getFileSnapshots() { return fileSnapshots; };
+        void setFileSnapshots(const map<string, string> &nFileSnapshots) { fileSnapshots = nFileSnapshots; };
 };
 
 #endif // STANDARDCOMMIT_H

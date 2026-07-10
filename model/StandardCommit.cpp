@@ -1,6 +1,14 @@
 #include "StandardCommit.h"
 
 #include <iostream>
+#include <ranges>
+#include <utility>
+
+StandardCommit::StandardCommit(string author, string message, string timestamp, string commitID)
+    : Commit(std::move(author),
+             std::move(message),
+             std::move(timestamp),
+             std::move(commitID)) {}
 
 StandardCommit::~StandardCommit() = default;
 
@@ -10,10 +18,6 @@ void StandardCommit::displayCommit() {
     cout << "Timestamp: " << this->getTimestamp() << endl;
     cout << "Commit ID: " << this->getCommitID() << endl;
     cout << "Files being commited (path):" << endl;
-    for (auto &[fst, snd] : fileSnapshots) {
-        cout << fst;
-    }
+    // go through tracked files and just print out path, we don't want to print the entire content
+    for (const auto &fst: fileSnapshots | views::keys) { cout << fst; }
 }
-
-// TODO: Implement getSummary
-string StandardCommit::getSummary() {return "";}
