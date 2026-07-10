@@ -1,0 +1,123 @@
+========================================
+  FinalProject Test Suite
+========================================
+
+=== TrackedFile: construction ===
+[PASS] f.getPath() == "src/main.cpp"
+[PASS] f.getContent() == "int main() {}"
+[PASS] f.getSize() == (int)string("int main() {}").size()
+[PASS] f.getStatus() == Status::Modified
+
+=== TrackedFile: empty content ===
+[PASS] f.getSize() == 0
+[PASS] f.getContent() == ""
+
+=== TrackedFile: setStatus ===
+[PASS] f.getStatus() == Status::Staged
+[PASS] f.getStatus() == Status::Committed
+[PASS] f.getStatus() == Status::Error
+
+=== TrackedFile: setContent updates content and size ===
+[PASS] f.getContent() == "hello world"
+[PASS] f.getSize() == (int)string("hello world").size()
+
+=== TrackedFile: updateContent updates content but NOT size (known inconsistency) ===
+[PASS] f.getContent() == "hello world"
+[PASS] f.getSize() == originalSize
+
+=== TrackedFile: setPath ===
+[PASS] f.getPath() == "new/path.cpp"
+
+=== TrackedFile: statusToString ===
+[PASS] statusToString(Status::Modified) == "Modified"
+[PASS] statusToString(Status::Staged) == "Staged"
+[PASS] statusToString(Status::Committed) == "Committed"
+[PASS] statusToString(Status::Error) == "Error"
+
+=== TrackedFile: statusFromString ===
+[PASS] statusFromString("Modified") == Status::Modified
+[PASS] statusFromString("Staged") == Status::Staged
+[PASS] statusFromString("Committed") == Status::Committed
+[PASS] statusFromString("garbage") == Status::Error
+[PASS] statusFromString("") == Status::Error
+
+=== TrackedFile: operator<< for Status ===
+[PASS] oss.str() == "Modified"
+[PASS] oss.str() == "Staged"
+
+=== StandardCommit: construction and getters ===
+[PASS] c.getAuthor() == "Alice"
+[PASS] c.getMessage() == "Initial commit"
+[PASS] c.getTimestamp() == "2026-01-01T00:00:00"
+[PASS] c.getCommitID() == "abc123"
+
+=== StandardCommit: setters ===
+[PASS] c.getAuthor() == "Bob"
+[PASS] c.getMessage() == "Updated message"
+[PASS] c.getTimestamp() == "2026-06-01T12:00:00"
+[PASS] c.getCommitID() == "def456"
+
+=== StandardCommit: equality operator (based on commitID) ===
+[PASS] c1 == c2
+[PASS] !(c1 == c3)
+
+=== StandardCommit: fileSnapshots empty by default ===
+[PASS] c.getFileSnapshots().empty()
+
+=== StandardCommit: setFileSnapshots / getFileSnapshots roundtrip ===
+[PASS] c.getFileSnapshots().size() == 2
+[PASS] c.getFileSnapshots().at("src/main.cpp") == "int main() { return 0; }"
+[PASS] c.getFileSnapshots().at("README.md") == "# Project"
+
+=== StandardCommit: overwriting fileSnapshots replaces old data ===
+[PASS] c.getFileSnapshots().count("a.cpp") == 0
+[PASS] c.getFileSnapshots().count("b.cpp") == 1
+
+=== StandardCommit: getSummary format ===
+[PASS] summary.find("abc123") != string::npos
+[PASS] summary.find("Alice") != string::npos
+[PASS] summary.find("Fix bug") != string::npos
+[PASS] summary.find("2") != string::npos
+
+=== StandardCommit: getSummary with no files ===
+[PASS] summary.find("0") != string::npos
+
+=== StandardCommit: operator<< delegates to getSummary ===
+[PASS] oss.str() == c.getSummary()
+
+=== StandardCommit: displayCommit smoke test (no crash) ===
+[PASS] sink.str().find("Alice") != string::npos
+[PASS] sink.str().find("main.cpp") != string::npos
+
+=== Validator: validateRepoName - empty string ===
+[PASS] !result.has_value()
+[PASS] result.error() == Error::Empty
+
+=== Validator: validateRepoName - too short (< 3 chars) ===
+[PASS] !result.has_value()
+[PASS] result.error() == Error::TooShort
+
+=== Validator: validateRepoName - single char ===
+[PASS] !result.has_value()
+[PASS] result.error() == Error::TooShort
+
+=== Validator: validateRepoName - too long (> 20 chars) ===
+[PASS] !result.has_value()
+[PASS] result.error() == Error::TooLong
+
+=== Validator: validateRepoName - valid name ===
+[PASS] result.has_value()
+[PASS] result.value() == "my-repo"
+
+=== Validator: validateRepoName - trims leading/trailing spaces ===
+[PASS] result.has_value()
+[PASS] result.value() == "my-repo"
+
+=== Validator: validateRepoName - exactly 3 chars ===
+[PASS] result.has_value()
+
+=== Validator: validateRepoName - exactly 20 chars ===
+[PASS] result.has_value()
+
+----------------------------------------
+Results: 63 passed, 0 failed

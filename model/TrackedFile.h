@@ -1,6 +1,5 @@
 #ifndef TRACKEDFILE_H
 #define TRACKEDFILE_H
-#include <utility>
 
 #include "string"
 using namespace std;
@@ -13,6 +12,7 @@ enum class Status {
     Error
 };
 
+
 /* NOTE: While there is an Error enum, see the following:
  * anything not identified as Modified|Staged|Committed will automatically be defined as an Error.
  * Careful with that. If you want that changed so that the Error enum is only used for actual errors
@@ -22,6 +22,12 @@ string statusToString(Status status);
 
 // NOTE: See above for note on Error
 Status statusFromString(const string& status);
+
+// Just a simple redirector overload for status enum. Essentially a toString wrapper
+inline std::ostream& operator<<(std::ostream& os, const Status& status) {
+    os << statusToString(status);
+    return os;
+}
 
 /* Represents a single file under version control.
  *
@@ -41,7 +47,7 @@ public:
     TrackedFile(string path, const string& content);
 
     void   updateContent(const string& content);
-    void   displayFileInfo();
+    void   displayFileInfo() const;
 
     // getters
     string getPath()         { return path; }

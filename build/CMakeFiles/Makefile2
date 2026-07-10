@@ -64,10 +64,12 @@ CMAKE_BINARY_DIR = /Users/andrei/School/CPP/FinalProject/build
 
 # The main recursive "all" target.
 all: CMakeFiles/FinalProjectCPP.dir/all
+all: CMakeFiles/TestRunner.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
 codegen: CMakeFiles/FinalProjectCPP.dir/codegen
+codegen: CMakeFiles/TestRunner.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -76,6 +78,8 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/FinalProjectCPP.dir/clean
+clean: CMakeFiles/TestRunner.dir/clean
+clean: CMakeFiles/RunTests.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -109,6 +113,70 @@ CMakeFiles/FinalProjectCPP.dir/codegen:
 CMakeFiles/FinalProjectCPP.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/clean
 .PHONY : CMakeFiles/FinalProjectCPP.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/TestRunner.dir
+
+# All Build rule for target.
+CMakeFiles/TestRunner.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/andrei/School/CPP/FinalProject/build/CMakeFiles --progress-num=9,10,11,12,13,14,15 "Built target TestRunner"
+.PHONY : CMakeFiles/TestRunner.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/TestRunner.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/andrei/School/CPP/FinalProject/build/CMakeFiles 7
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/TestRunner.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/andrei/School/CPP/FinalProject/build/CMakeFiles 0
+.PHONY : CMakeFiles/TestRunner.dir/rule
+
+# Convenience name for target.
+TestRunner: CMakeFiles/TestRunner.dir/rule
+.PHONY : TestRunner
+
+# codegen rule for target.
+CMakeFiles/TestRunner.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/andrei/School/CPP/FinalProject/build/CMakeFiles --progress-num=9,10,11,12,13,14,15 "Finished codegen for target TestRunner"
+.PHONY : CMakeFiles/TestRunner.dir/codegen
+
+# clean rule for target.
+CMakeFiles/TestRunner.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/clean
+.PHONY : CMakeFiles/TestRunner.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/RunTests.dir
+
+# All Build rule for target.
+CMakeFiles/RunTests.dir/all: CMakeFiles/TestRunner.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/andrei/School/CPP/FinalProject/build/CMakeFiles --progress-num=8 "Built target RunTests"
+.PHONY : CMakeFiles/RunTests.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/RunTests.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/andrei/School/CPP/FinalProject/build/CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/RunTests.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/andrei/School/CPP/FinalProject/build/CMakeFiles 0
+.PHONY : CMakeFiles/RunTests.dir/rule
+
+# Convenience name for target.
+RunTests: CMakeFiles/RunTests.dir/rule
+.PHONY : RunTests
+
+# codegen rule for target.
+CMakeFiles/RunTests.dir/codegen: CMakeFiles/TestRunner.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/andrei/School/CPP/FinalProject/build/CMakeFiles --progress-num=8 "Finished codegen for target RunTests"
+.PHONY : CMakeFiles/RunTests.dir/codegen
+
+# clean rule for target.
+CMakeFiles/RunTests.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/clean
+.PHONY : CMakeFiles/RunTests.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

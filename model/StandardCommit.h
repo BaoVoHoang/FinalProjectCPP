@@ -2,7 +2,6 @@
 #define STANDARDCOMMIT_H
 #include "Commit.h"
 #include <map>
-#include <utility>
 
 
 /* Concrete Commit implementation used for ordinary commits.
@@ -28,7 +27,7 @@ class StandardCommit : public Commit {
         ~StandardCommit() override;
         void displayCommit() override;
         // TODO: currently is exact same as base class, should implement to consider extra info in concrete class
-        string getSummary() const override {return "COMMIT-"+commitID+"-"+message+"-"+"author";}
+        string getSummary() const override;
 
         map<string, string> getFileSnapshots() { return fileSnapshots; };
         void setFileSnapshots(const map<string, string> &nFileSnapshots) { fileSnapshots = nFileSnapshots; };

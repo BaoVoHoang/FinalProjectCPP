@@ -1,3 +1,5 @@
 /Users/andrei/School/CPP/FinalProject/build/CMakeFiles/FinalProjectCPP.dir
+/Users/andrei/School/CPP/FinalProject/build/CMakeFiles/TestRunner.dir
+/Users/andrei/School/CPP/FinalProject/build/CMakeFiles/RunTests.dir
 /Users/andrei/School/CPP/FinalProject/build/CMakeFiles/edit_cache.dir
 /Users/andrei/School/CPP/FinalProject/build/CMakeFiles/rebuild_cache.dir

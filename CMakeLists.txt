@@ -20,3 +20,30 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     view
     controller
 )
+
+# ---- Test target ----
+set(MODEL_SOURCES
+    model/Commit.cpp
+    model/StandardCommit.cpp
+    model/TrackedFile.cpp
+    model/Validator.cpp
+    model/DiffEngine.cpp
+)
+
+add_executable(TestRunner
+    tests/test_main.cpp
+    ${MODEL_SOURCES}
+)
+
+set_target_properties(TestRunner PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests
+)
+
+target_include_directories(TestRunner PRIVATE model)
+
+add_custom_target(RunTests
+    COMMAND ${CMAKE_SOURCE_DIR}/tests/TestRunner > ${CMAKE_SOURCE_DIR}/tests/test_output.txt 2>&1
+    DEPENDS TestRunner
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Running tests — output written to tests/test_output.txt"
+)

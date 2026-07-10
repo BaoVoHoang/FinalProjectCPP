@@ -5,10 +5,10 @@
 #include <utility>
 
 StandardCommit::StandardCommit(string author, string message, string timestamp, string commitID)
-    : Commit(std::move(author),
+    : Commit( std::move(author),
              std::move(message),
-             std::move(timestamp),
-             std::move(commitID)) {}
+           std::move(timestamp),
+            std::move(commitID)) {}
 
 StandardCommit::~StandardCommit() = default;
 
@@ -20,4 +20,11 @@ void StandardCommit::displayCommit() {
     cout << "Files being commited (path):" << endl;
     // go through tracked files and just print out path, we don't want to print the entire content
     for (const auto &fst: fileSnapshots | views::keys) { cout << fst; }
+}
+
+string StandardCommit::getSummary() const {
+    return "COMMIT-"+commitID+"-" +
+            to_string(fileSnapshots.size())+" files-" +
+            message+"-" +
+            author;
 }

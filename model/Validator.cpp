@@ -1,6 +1,5 @@
 #include "Validator.h"
 #include <regex>
-#include <algorithm>
 
 using namespace std;
 
@@ -18,7 +17,8 @@ string Validator::trim (const::string &name) {
 expected<string, Error> Validator::validateRepoName (const std::string &name) {
 
     // to check if given string contains at least one alpha
-    const regex oneAlpha("?=.[a-zA-Z]");
+    // matches strings that contain NO alphabetic characters
+    const regex oneAlpha("[^a-zA-Z]+");
 
     if (name.empty()) return                unexpected(Error::Empty);
     if (name.length() < 3) return           unexpected(Error::TooShort);

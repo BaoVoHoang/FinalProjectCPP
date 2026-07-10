@@ -129,6 +129,32 @@ FinalProjectCPP/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/build
 .PHONY : FinalProjectCPP/fast
 
+#=============================================================================
+# Target rules for targets named TestRunner
+
+# Build rule for target.
+TestRunner: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 TestRunner
+.PHONY : TestRunner
+
+# fast build rule for target.
+TestRunner/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/build
+.PHONY : TestRunner/fast
+
+#=============================================================================
+# Target rules for targets named RunTests
+
+# Build rule for target.
+RunTests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 RunTests
+.PHONY : RunTests
+
+# fast build rule for target.
+RunTests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/RunTests.dir/build.make CMakeFiles/RunTests.dir/build
+.PHONY : RunTests/fast
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -159,6 +185,7 @@ model/Commit.o: model/Commit.cpp.o
 # target to build an object file
 model/Commit.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Commit.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/Commit.cpp.o
 .PHONY : model/Commit.cpp.o
 
 model/Commit.i: model/Commit.cpp.i
@@ -167,6 +194,7 @@ model/Commit.i: model/Commit.cpp.i
 # target to preprocess a source file
 model/Commit.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Commit.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/Commit.cpp.i
 .PHONY : model/Commit.cpp.i
 
 model/Commit.s: model/Commit.cpp.s
@@ -175,6 +203,7 @@ model/Commit.s: model/Commit.cpp.s
 # target to generate assembly for a file
 model/Commit.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Commit.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/Commit.cpp.s
 .PHONY : model/Commit.cpp.s
 
 model/DiffEngine.o: model/DiffEngine.cpp.o
@@ -183,6 +212,7 @@ model/DiffEngine.o: model/DiffEngine.cpp.o
 # target to build an object file
 model/DiffEngine.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/DiffEngine.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/DiffEngine.cpp.o
 .PHONY : model/DiffEngine.cpp.o
 
 model/DiffEngine.i: model/DiffEngine.cpp.i
@@ -191,6 +221,7 @@ model/DiffEngine.i: model/DiffEngine.cpp.i
 # target to preprocess a source file
 model/DiffEngine.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/DiffEngine.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/DiffEngine.cpp.i
 .PHONY : model/DiffEngine.cpp.i
 
 model/DiffEngine.s: model/DiffEngine.cpp.s
@@ -199,6 +230,7 @@ model/DiffEngine.s: model/DiffEngine.cpp.s
 # target to generate assembly for a file
 model/DiffEngine.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/DiffEngine.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/DiffEngine.cpp.s
 .PHONY : model/DiffEngine.cpp.s
 
 model/StandardCommit.o: model/StandardCommit.cpp.o
@@ -207,6 +239,7 @@ model/StandardCommit.o: model/StandardCommit.cpp.o
 # target to build an object file
 model/StandardCommit.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/StandardCommit.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/StandardCommit.cpp.o
 .PHONY : model/StandardCommit.cpp.o
 
 model/StandardCommit.i: model/StandardCommit.cpp.i
@@ -215,6 +248,7 @@ model/StandardCommit.i: model/StandardCommit.cpp.i
 # target to preprocess a source file
 model/StandardCommit.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/StandardCommit.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/StandardCommit.cpp.i
 .PHONY : model/StandardCommit.cpp.i
 
 model/StandardCommit.s: model/StandardCommit.cpp.s
@@ -223,6 +257,7 @@ model/StandardCommit.s: model/StandardCommit.cpp.s
 # target to generate assembly for a file
 model/StandardCommit.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/StandardCommit.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/StandardCommit.cpp.s
 .PHONY : model/StandardCommit.cpp.s
 
 model/TrackedFile.o: model/TrackedFile.cpp.o
@@ -231,6 +266,7 @@ model/TrackedFile.o: model/TrackedFile.cpp.o
 # target to build an object file
 model/TrackedFile.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/TrackedFile.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/TrackedFile.cpp.o
 .PHONY : model/TrackedFile.cpp.o
 
 model/TrackedFile.i: model/TrackedFile.cpp.i
@@ -239,6 +275,7 @@ model/TrackedFile.i: model/TrackedFile.cpp.i
 # target to preprocess a source file
 model/TrackedFile.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/TrackedFile.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/TrackedFile.cpp.i
 .PHONY : model/TrackedFile.cpp.i
 
 model/TrackedFile.s: model/TrackedFile.cpp.s
@@ -247,6 +284,7 @@ model/TrackedFile.s: model/TrackedFile.cpp.s
 # target to generate assembly for a file
 model/TrackedFile.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/TrackedFile.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/TrackedFile.cpp.s
 .PHONY : model/TrackedFile.cpp.s
 
 model/Validator.o: model/Validator.cpp.o
@@ -255,6 +293,7 @@ model/Validator.o: model/Validator.cpp.o
 # target to build an object file
 model/Validator.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Validator.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/Validator.cpp.o
 .PHONY : model/Validator.cpp.o
 
 model/Validator.i: model/Validator.cpp.i
@@ -263,6 +302,7 @@ model/Validator.i: model/Validator.cpp.i
 # target to preprocess a source file
 model/Validator.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Validator.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/Validator.cpp.i
 .PHONY : model/Validator.cpp.i
 
 model/Validator.s: model/Validator.cpp.s
@@ -271,7 +311,32 @@ model/Validator.s: model/Validator.cpp.s
 # target to generate assembly for a file
 model/Validator.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FinalProjectCPP.dir/build.make CMakeFiles/FinalProjectCPP.dir/model/Validator.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/model/Validator.cpp.s
 .PHONY : model/Validator.cpp.s
+
+tests/test_main.o: tests/test_main.cpp.o
+.PHONY : tests/test_main.o
+
+# target to build an object file
+tests/test_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/tests/test_main.cpp.o
+.PHONY : tests/test_main.cpp.o
+
+tests/test_main.i: tests/test_main.cpp.i
+.PHONY : tests/test_main.i
+
+# target to preprocess a source file
+tests/test_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/tests/test_main.cpp.i
+.PHONY : tests/test_main.cpp.i
+
+tests/test_main.s: tests/test_main.cpp.s
+.PHONY : tests/test_main.s
+
+# target to generate assembly for a file
+tests/test_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestRunner.dir/build.make CMakeFiles/TestRunner.dir/tests/test_main.cpp.s
+.PHONY : tests/test_main.cpp.s
 
 # Help Target
 help:
@@ -281,7 +346,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... RunTests"
 	@echo "... FinalProjectCPP"
+	@echo "... TestRunner"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
@@ -300,6 +367,9 @@ help:
 	@echo "... model/Validator.o"
 	@echo "... model/Validator.i"
 	@echo "... model/Validator.s"
+	@echo "... tests/test_main.o"
+	@echo "... tests/test_main.i"
+	@echo "... tests/test_main.s"
 .PHONY : help
 
 
