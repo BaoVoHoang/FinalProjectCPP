@@ -30,16 +30,22 @@ set(MODEL_SOURCES
     model/DiffEngine.cpp
 )
 
+# View sources exercised by the test suite (pure formatting helpers live here).
+set(VIEW_SOURCES
+    view/ConsoleView.cpp
+)
+
 add_executable(TestRunner
     tests/test_main.cpp
     ${MODEL_SOURCES}
+    ${VIEW_SOURCES}
 )
 
 set_target_properties(TestRunner PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests
 )
 
-target_include_directories(TestRunner PRIVATE model)
+target_include_directories(TestRunner PRIVATE model view)
 
 add_custom_target(RunTests
     COMMAND ${CMAKE_SOURCE_DIR}/tests/TestRunner > ${CMAKE_SOURCE_DIR}/tests/test_output.txt 2>&1
