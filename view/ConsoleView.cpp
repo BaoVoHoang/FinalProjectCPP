@@ -91,6 +91,10 @@ string ConsoleView::promptLine(const string& prompt) const {
     cout.flush();
     string line;
     if (!getline(cin, line)) return "";
+    // getline splits on '\n', so input with Windows CRLF line endings (e.g. a
+    // piped file) leaves a trailing '\r'. Drop it so keyword and number matching
+    // ("all", "#1", menu choices) behaves the same regardless of line endings.
+    if (!line.empty() && line.back() == '\r') line.pop_back();
     return line;
 }
 

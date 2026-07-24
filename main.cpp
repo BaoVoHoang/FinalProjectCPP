@@ -181,12 +181,17 @@ private:
     }
 
     void commitStaged() {
-        // Collect everything currently staged.
+        // A StandardCommit stores a FULL snapshot of every tracked file at commit
+        // time, so start from the previous commit's snapshot and overlay the files
+        // that are staged now. This keeps files from earlier commits present in the
+        // new one instead of each commit only holding its own staged changes.
         map<string, string> snapshot;
+        if (!history.empty()) snapshot = history.back().getFileSnapshots();
+
         vector<TrackedFile*> stagedFiles;
         for (auto& [path, file] : workingFiles) {
             if (file.getStatus() == Status::Staged) {
-                snapshot.emplace(file.getPath(), file.getContent());
+                snapshot[file.getPath()] = file.getContent();
                 stagedFiles.push_back(&file);
             }
         }
@@ -219,8 +224,9 @@ private:
         // Move the committed files out of the staging area.
         for (auto* file : stagedFiles) file->setStatus(Status::Committed);
 
-        view.showMessage("Created commit " + id + " with " +
-                         to_string(snapshot.size()) + " file(s).");
+        view.showMessage("Created commit " + id + " (" +
+                         to_string(stagedFiles.size()) + " staged, " +
+                         to_string(snapshot.size()) + " file(s) in snapshot).");
     }
 
     void showLog() {
