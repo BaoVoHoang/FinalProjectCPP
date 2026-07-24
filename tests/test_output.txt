@@ -21,9 +21,9 @@
 [PASS] f.getContent() == "hello world"
 [PASS] f.getSize() == (int)string("hello world").size()
 
-=== TrackedFile: updateContent updates content but NOT size (known inconsistency) ===
+=== TrackedFile: updateContent updates content AND size ===
 [PASS] f.getContent() == "hello world"
-[PASS] f.getSize() == originalSize
+[PASS] f.getSize() == (int)string("hello world").size()
 
 === TrackedFile: setPath ===
 [PASS] f.getPath() == "new/path.cpp"
@@ -119,5 +119,23 @@
 === Validator: validateRepoName - exactly 20 chars ===
 [PASS] result.has_value()
 
+=== ConsoleView: formatStatusLine shows path, status and size ===
+[PASS] line.find("src/app.cpp") != string::npos
+[PASS] line.find("Modified") != string::npos
+[PASS] line.find("5") != string::npos
+
+=== ConsoleView: formatStatusLine reflects a staged file ===
+[PASS] line.find("Staged") != string::npos
+[PASS] line.find("a.txt") != string::npos
+
+=== ConsoleView: formatCommitSummary includes the row number and summary ===
+[PASS] s.find("#1") != string::npos
+[PASS] s.find("abc1234") != string::npos
+[PASS] s.find("First commit") != string::npos
+[PASS] s.find("Bao") != string::npos
+
+=== ConsoleView: formatCommitSummary matches the commit's own getSummary ===
+[PASS] s.find(c.getSummary()) != string::npos
+
 ----------------------------------------
-Results: 63 passed, 0 failed
+Results: 73 passed, 0 failed

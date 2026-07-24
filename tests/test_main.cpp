@@ -4,6 +4,7 @@
 #include "TrackedFile.h"
 #include "StandardCommit.h"
 #include "Validator.h"
+#include "ConsoleView.h"
 
 using namespace std;
 
@@ -60,14 +61,13 @@ static void testTrackedFile() {
         CHECK(f.getSize()    == (int)string("hello world").size());
     }
 
-    SECTION("TrackedFile: updateContent updates content but NOT size (known inconsistency)");
+    SECTION("TrackedFile: updateContent updates content AND size");
     {
         TrackedFile f("a.cpp", "hello");
-        int originalSize = f.getSize();
         f.updateContent("hello world");
         CHECK(f.getContent() == "hello world");
-        // updateContent does not recalculate size — this test documents the behaviour
-        CHECK(f.getSize() == originalSize);
+        // updateContent now delegates to setContent, so size is recalculated too.
+        CHECK(f.getSize() == (int)string("hello world").size());
     }
 
     SECTION("TrackedFile: setPath");
@@ -266,6 +266,44 @@ static void testValidator() {
     }
 }
 
+// ---- ConsoleView tests (view layer — pure formatting helpers) ----
+static void testConsoleView() {
+    SECTION("ConsoleView: formatStatusLine shows path, status and size");
+    {
+        TrackedFile f("src/app.cpp", "hello"); // size 5, starts Modified
+        string line = ConsoleView::formatStatusLine(f);
+        CHECK(line.find("src/app.cpp") != string::npos);
+        CHECK(line.find("Modified")    != string::npos);
+        CHECK(line.find("5")           != string::npos);
+    }
+
+    SECTION("ConsoleView: formatStatusLine reflects a staged file");
+    {
+        TrackedFile f("a.txt", "abc");
+        f.setStatus(Status::Staged);
+        string line = ConsoleView::formatStatusLine(f);
+        CHECK(line.find("Staged") != string::npos);
+        CHECK(line.find("a.txt")  != string::npos);
+    }
+
+    SECTION("ConsoleView: formatCommitSummary includes the row number and summary");
+    {
+        StandardCommit c("Bao", "First commit", "2026-07-23T10:00:00", "abc1234");
+        string s = ConsoleView::formatCommitSummary(1, c);
+        CHECK(s.find("#1")           != string::npos);
+        CHECK(s.find("abc1234")      != string::npos);
+        CHECK(s.find("First commit") != string::npos);
+        CHECK(s.find("Bao")          != string::npos);
+    }
+
+    SECTION("ConsoleView: formatCommitSummary matches the commit's own getSummary");
+    {
+        StandardCommit c("Bao", "msg", "ts", "id42");
+        string s = ConsoleView::formatCommitSummary(7, c);
+        CHECK(s.find(c.getSummary()) != string::npos);
+    }
+}
+
 int main() {
     cout << "========================================\n";
     cout << "  FinalProject Test Suite\n";
@@ -274,6 +312,7 @@ int main() {
     testTrackedFile();
     testCommit();
     testValidator();
+    testConsoleView();
 
     printSummary();
     return g_failed == 0 ? 0 : 1;
