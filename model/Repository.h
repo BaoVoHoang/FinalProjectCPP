@@ -1,3 +1,7 @@
+/*Main backend class, stores repository info, 
+*uses tracked file and commit.h (Standartcommit.h with dynamic_cast).
+*
+*/
 #ifndef REPOSITORY_H
 #define REPOSITORY_H
 
@@ -27,9 +31,13 @@ public:
 
     virtual ~Repository() = default;
 
+    // Initializes repository name and path.
     bool initRepository(const string& RepoName, const string& RepoPath);
+    
+    // Adds a file into the tracked files list.
     bool addFile(const string filePath);
 
+    // Changes a tracked file status to Staged.
     bool stageFile(const string filePath);
     bool commitChanges(const string& message, const string& author);
     bool restoreFile(const string& commitID, const string& filePath);
