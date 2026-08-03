@@ -2,6 +2,9 @@
 #include <iostream>
 #include <map>
 
+#include <ctime>
+#include <utility>
+
 //for better GUI experience 
 Repository::Repository()
     : repPath(""),
@@ -100,47 +103,62 @@ vector<string> Repository::getCommitHistory() const {
     return true;
 }
     
-    // bool commitChanges(const string& message, const string& author);
-    //save only the staged into files vector  
-    bool Repository::commitChanges(const string& message, const string& author){
     
-        if (message.empty() || author.empty()) {
+   // bool commitChanges(const string& message, const string& author);
+//save only the staged into files vector  
+bool Repository::commitChanges(const string& message, const string& author){
+
+    if (!Sucinitialized) {
+        return false;
+    }
+
+    if (message.empty() || author.empty()) {
         return false;
     }    
-        //Path,Content with respect
+
+    //Path,Content with respect
     map<string, string> Tempsnapshots; 
 
-        for (auto& file : files) {
+    // take staged files into snapshot
+    for (auto& file : files) {
+
         if (file.getStatus() == Status::Staged ) {
             Tempsnapshots[file.getPath()] = file.getContent();
-
-
         }
-        }
+    }
 
+    if (Tempsnapshots.empty()) {
+        cout<<"Snapshot is empty"<<endl;
+        return false;
+    }
 
-        if (Tempsnapshots.empty()) {
-       
-            cout<<"Snapshot is empty"<<endl;
-            return false;
+    // simple timestamp
+    time_t now = time(0);
+    string timeText = ctime(&now);
+
+    // ctime gives new line, remove it
+    if (!timeText.empty() && timeText[timeText.size() - 1] == '\n') {
+        timeText.erase(timeText.size() - 1);
     }
 
     //creating attributes to put into FileSnapshots in StandardCommit
     auto newCommit = make_unique<StandardCommit>(
         author,
         message,
-        "TEMP_TIMESTAMP",
-        "COMMIT-" + to_string(commits.size() + 1)
+        timeText,
+        to_string(commits.size() + 1)
+        // "COMMIT-" + to_string(commits.size() + 1) "commit" word is already added in main ?
     );
 
-    newCommit->setFileSnapshots(TempSnapshots);
-//
+    // put snapshot map into StandardCommit
+    newCommit->setFileSnapshots(Tempsnapshots);
 
-
-//Adding to Commits vector. Need to write this into a file and read !!!
+    //Adding to Commits vector. Need to write this into a file and read !!!
     commits.push_back(move(newCommit));
 
+    // after commit, staged files become committed
     for (auto& file : files) {
+
         if (file.getStatus() == Status::Staged) {
             file.setStatus(Status::Committed);
         }
@@ -170,7 +188,6 @@ vector<string> Repository::getCommitHistory() const {
     
             //Take the map to exSnapshots 
             map<string, string> exSnapshots = pointerCommit->getFileSnapshots();
-
             for (auto& snapshot : exSnapshots) {
 
                 if (snapshot.first == filePath) {
@@ -178,6 +195,9 @@ vector<string> Repository::getCommitHistory() const {
                     for (auto& file : files) {
 
                         if (file.getPath() == filePath) {
+
+
+
 
                             file.setContent(snapshot.second);
                             file.setStatus(Status::Modified);

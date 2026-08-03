@@ -1,3 +1,6 @@
+/* Handles basic comparison between two file
+ * and prepares diff output for display.
+ */
 #ifndef DIFFENGINE_H
 #define DIFFENGINE_H
 

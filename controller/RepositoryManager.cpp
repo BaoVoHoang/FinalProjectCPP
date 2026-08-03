@@ -50,10 +50,11 @@ vector<string> RepositoryManager::searchCommits(const string searchText) {
         return allCommits;
     }
 
-    // TODO:
     // search inside commit summaries
     for(auto comSum: allCommits){
-        if(comSum.find(searchText) == 0){
+     //   if(comSum.find(searchText) == 0){
+     //changed to this because looks for the whole not only to beggining 
+     if(comSum.find(searchText) != string::npos){
             results.push_back(comSum);
         }
     }
@@ -64,12 +65,11 @@ vector<string> RepositoryManager::searchCommits(const string searchText) {
 
 string RepositoryManager::getFileStatus(const string filePath) {
 
-    // TODO:
     // loop through repoClas.getFiles()
     for(auto reps: repoClas.getFiles()){
 
         if(reps.getPath() == filePath){
-            return statusToString(file.getStatus());
+            return statusToString(reps.getStatus());
         }
     }
     // if path matches, return statusToString(file.getStatus())

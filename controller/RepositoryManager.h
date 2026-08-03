@@ -1,3 +1,6 @@
+/* Acts as a bridge between the GUI and repository logic.
+ *  manages the repository operations.
+ */
 #ifndef REPOSITORYMANAGER_H
 #define REPOSITORYMANAGER_H
 
@@ -12,7 +15,7 @@ using namespace std;
 
 class RepositoryManager {
 private:
-    Repository repo;
+    Repository repoClas;
     DataManager dataManager;
     DiffEngine diffEngine;
 
@@ -20,19 +23,23 @@ public:
 
     bool initRepository(const string RepoName, const string RepoPath);
 
-    bool addFile(const string filePath);
-
-    bool stageFile(const string filePath);
-
-    bool commitChanges(const string message, const string author);
-
-    bool restoreFile(const string commitID, const string filePath);
+  
 
     bool saveRepository(const string fileName);
 
     bool loadRepository(const string fileName);
 
     vector<string> searchCommits(const string searchText);
+
+
+      bool addFile(const string filePath);
+
+    bool stageFile(const string filePath);
+
+    bool commitChanges(const string message, const string author);
+
+    bool restoreFile(const string commitID, const string filePath); 
+
 
     string getFileStatus(const string filePath);
 

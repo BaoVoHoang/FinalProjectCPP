@@ -3,25 +3,34 @@
 
 string DiffEngine::computeDiff(const string oldContent, const string newContent) {
 
-    string result = "";
+    string outputResult = "";
 
     // if same content, no diff
     if (oldContent == newContent) {
+
+
+        
         return "No differences found";
     }
 
     // basic version for now
     // later we can make line by line diff
-    result += "Old Content:\n";
-    result += oldContent;
+    outputResult += "Old Content:\n";
+    outputResult += oldContent;
 
-    result += "\n\nNew Content:\n";
-    result += newContent;
+    outputResult += "\n\nNew Content:\n";
+    outputResult += newContent;
 
-    return result;
+    return outputResult;
 }
 
+
+
+// Call the computeDiff, assing it to variable, then call this with it
 void DiffEngine::displayDiff(const string diffText) {
+
+
+
 
     // simple console display for now
     cout << diffText << endl;
