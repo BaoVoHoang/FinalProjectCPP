@@ -12,7 +12,7 @@
 //
 // Only success paths are clicked on purpose: a failed operation opens a modal
 // QMessageBox, which would block a non-interactive run forever. The failure
-// messages themselves are already covered by the RepositoryManager tests in
+// messages themselves are already covered by the AppController tests in
 // test_main.cpp.
 
 #include <QApplication>

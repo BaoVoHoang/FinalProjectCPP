@@ -5,7 +5,7 @@
 
 #include <functional>
 
-#include "RepositoryManager.h"
+#include "AppController.h"
 
 class QCloseEvent;
 class QComboBox;
@@ -23,8 +23,8 @@ class QTableWidget;
  * The graphical counterpart to ConsoleView, and it follows exactly the same
  * rule: this class owns every widget and every message box, and holds no
  * business logic whatsoever. Each slot is the same three steps the console
- * handlers use — read the widgets, call ONE RepositoryManager method, then show
- * the manager's own explanation in the status bar.
+ * handlers use — read the widgets, call ONE AppController method, then show
+ * the controller's own explanation in the status bar.
  *
  * Because both front ends talk to the identical controller, the model and
  * controller layers needed no changes at all to gain a GUI.
@@ -74,7 +74,7 @@ private slots:
 
 private:
     // the one and only path to the model
-    RepositoryManager manager;
+    AppController manager;
 
     QTabWidget* tabs = nullptr;
 
