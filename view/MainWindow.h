@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 
 #include <functional>
 
@@ -122,6 +123,22 @@ private:
     // between runs so the previous session can be restored on startup.
     QString lastDataFile;
 
+    /* ----- GUI edge-case guards -----
+     *
+     * dialogOpen  - true while a modal message box is on screen. Every dialog in
+     *               this class goes through the ask/info/warn/fail helpers below,
+     *               which refuse to open a second one on top of the first. Qt
+     *               blocks the user from clicking through a modal, but a signal
+     *               arriving while one is up (a queued click, a timer, a test
+     *               driving widgets directly) can still stack them.
+     *
+     * commitBusy  - true for the duration of onCommit(). Guards against the
+     *               Commit button being pressed repeatedly before the first
+     *               press has finished and the views have been redrawn.
+     */
+    bool dialogOpen = false;
+    bool commitBusy = false;
+
     // ----- construction helpers -----
     QWidget* buildRepositoryTab();
     QWidget* buildFilesTab();
@@ -159,6 +176,22 @@ private:
 
     // Restores the repository saved by the previous session, if there is one.
     void loadPreviousSession();
+
+    /* ----- the only way this class shows a dialog -----
+     *
+     * Each one refuses to open while another is already showing, which is what
+     * keeps modal dialogs from stacking. info/warn/fail simply do nothing in
+     * that case; ask() returns the caller's `whenBlocked` answer so a blocked
+     * confirmation is treated as "the user did not agree".
+     */
+    void info(const QString& title, const QString& text);
+    void warn(const QString& title, const QString& text);
+    void fail(const QString& title, const QString& text);
+    QMessageBox::StandardButton ask(const QString& title, const QString& text,
+                                    QMessageBox::StandardButtons buttons,
+                                    QMessageBox::StandardButton defaultButton,
+                                    QMessageBox::StandardButton whenBlocked,
+                                    QMessageBox::Icon icon = QMessageBox::Question);
 
     // Paints a line edit red (or clears it) and explains why through a tooltip.
     static void markField(QLineEdit* field, const std::string& problem);

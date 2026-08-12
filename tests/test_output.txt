@@ -101,7 +101,9 @@
 [PASS] !result.has_value()
 [PASS] result.error() == Error::TooShort
 
-=== Validator: validateRepoName - too long (> 20 chars) ===
+=== Validator: validateRepoName - too long (> 50 chars) ===
+[PASS] v.validateRepoName("this-name-is-way-too-long").has_value()
+[PASS] v.validateRepoName(string(50, 'a')).has_value()
 [PASS] !result.has_value()
 [PASS] result.error() == Error::TooLong
 
@@ -174,12 +176,46 @@
 [PASS] empty.error() == Error::Empty
 [PASS] !tooLong.has_value()
 [PASS] tooLong.error() == Error::TooLong
+[PASS] !tooShort.has_value()
+[PASS] tooShort.error() == Error::TooShort
 
-=== Validator: validateCommitID ===
-[PASS] v.validateCommitID("3").has_value()
-[PASS] v.validateCommitID("a1b2c3d").has_value()
+=== Validator: validateAuthor enforces 3-50 characters ===
+[PASS] v.validateAuthor("Bao").has_value()
+[PASS] !tooShort.has_value()
+[PASS] tooShort.error() == Error::TooShort
+[PASS] !tooLong.has_value()
+[PASS] tooLong.error() == Error::TooLong
+[PASS] !v.validateAuthor("12345").has_value()
+
+=== Validator: validateCommitID enforces the COMMIT-0001 format ===
+[PASS] v.validateCommitID("COMMIT-0001").has_value()
+[PASS] v.validateCommitID("COMMIT-9999").has_value()
+[PASS] v.validateCommitID("COMMIT-10000").has_value()
 [PASS] !v.validateCommitID("").has_value()
+[PASS] !v.validateCommitID("3").has_value()
+[PASS] !v.validateCommitID("a1b2c3d").has_value()
+[PASS] !v.validateCommitID("commit-0001").has_value()
+[PASS] !v.validateCommitID("COMMIT-001").has_value()
+[PASS] !v.validateCommitID("COMMIT-0001x").has_value()
 [PASS] !v.validateCommitID("has space").has_value()
+
+=== Validator: formatCommitID produces spec-format ids ===
+[PASS] Validator::formatCommitID(0) == "COMMIT-0001"
+[PASS] Validator::formatCommitID(1) == "COMMIT-0002"
+[PASS] Validator::formatCommitID(41) == "COMMIT-0042"
+[PASS] Validator::formatCommitID(9999) == "COMMIT-10000"
+[PASS] v.validateCommitID(Validator::formatCommitID(7)).has_value()
+
+=== Validator: validateStatusTransition guards the file lifecycle ===
+[PASS] !v.validateStatusTransition(Status::Modified, Status::Staged).has_value()
+[PASS] v.validateStatusTransition(Status::Modified, Status::Committed).has_value()
+[PASS] !v.validateStatusTransition(Status::Staged, Status::Committed).has_value()
+[PASS] !v.validateStatusTransition(Status::Staged, Status::Modified).has_value()
+[PASS] !v.validateStatusTransition(Status::Committed, Status::Modified).has_value()
+[PASS] v.validateStatusTransition(Status::Committed, Status::Staged).has_value()
+[PASS] !v.validateStatusTransition(Status::Staged, Status::Staged).has_value()
+[PASS] v.validateStatusTransition(Status::Error, Status::Staged).has_value()
+[PASS] v.validateStatusTransition(Status::Modified, Status::Error).has_value()
 
 === DiffEngine: identical content reports no differences ===
 [PASS] diff.computeDiff("same\n", "same\n") == "No differences found"
@@ -522,6 +558,43 @@ Load file could not be opened
 [PASS] !manager.refreshFile("vanishing.txt")
 [PASS] manager.lastMessage().find("Cannot re-read") != string::npos
 
+=== Edge: a read-only file is tracked and committed without error ===
+[PASS] manager.addFile("readonly.txt")
+[PASS] manager.getFiles()[0].getContent() == "cannot be written\n"
+[PASS] manager.stageFile("readonly.txt")
+[PASS] manager.commitChanges("commit a read-only file", "Bao")
+[PASS] wrote || manager.lastMessage().find("Could not write") != string::npos
+
+=== Edge: invalid character encoding is carried through, not crashed on ===
+[PASS] manager.addFile("binary.txt")
+[PASS] manager.stageFile("binary.txt")
+[PASS] manager.commitChanges("commit odd bytes", "Bao")
+[PASS] manager.saveRepository(saveFile)
+[PASS] reloaded.loadRepository(saveFile)
+[PASS] reloaded.getTrackedFileCount() == 1
+
+=== Edge: duplicate commit ids loaded from a file are detected ===
+[PASS] manager.commitChanges("first commit", "Bao")
+[PASS] manager.refreshFile("dup.txt")
+[PASS] manager.stageFile("dup.txt")
+[PASS] manager.commitChanges("second commit", "Bao")
+[PASS] manager.saveRepository(saveFile)
+[PASS] reloaded.loadRepository(saveFile)
+[PASS] Validator().validateCommitID(commit->getCommitID()).has_value()
+[PASS] Validator().validateCommitID(commit->getCommitID()).has_value()
+[PASS] ids.size() == reloaded.getCommits().size()
+[PASS] ids.count("COMMIT-0001") == 1
+[PASS] ids.count("COMMIT-0002") == 1
+
+=== Edge: a commit referencing a file that no longer exists is handled ===
+[PASS] manager.commitChanges("commit before deletion", "Bao")
+[PASS] manager.diffFileAgainstCommit(id, "gone.txt", diff)
+[PASS] manager.restoreFile(id, "gone.txt")
+[PASS] manager.writeFileToDisk("gone.txt")
+[PASS] readTmpFile("gone.txt") == "here now\n"
+[PASS] !manager.restoreFile(id, "never-existed.txt")
+[PASS] manager.lastMessage().find("not tracked") != string::npos
+
 === Edge: special characters in a search do not crash the application ===
 [PASS] manager.searchCommits("(normal)").size() == 1
 [PASS] manager.searchCommits("[](){}*?\\").empty()
@@ -529,4 +602,4 @@ Load file could not be opened
 [PASS] manager.searchCommits(string(500, 'x')).empty()
 
 ----------------------------------------
-Results: 342 passed, 0 failed
+Results: 401 passed, 0 failed

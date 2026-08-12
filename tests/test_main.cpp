@@ -242,9 +242,13 @@ static void testValidator() {
         CHECK(result.error() == Error::TooShort);
     }
 
-    SECTION("Validator: validateRepoName - too long (> 20 chars)");
+    SECTION("Validator: validateRepoName - too long (> 50 chars)");
     {
-        auto result = v.validateRepoName("this-name-is-way-too-long");
+        // the specification allows up to 50 characters
+        CHECK(v.validateRepoName("this-name-is-way-too-long").has_value());
+        CHECK(v.validateRepoName(string(50, 'a')).has_value());
+
+        auto result = v.validateRepoName(string(51, 'a'));
         CHECK(!result.has_value());
         CHECK(result.error() == Error::TooLong);
     }
@@ -442,14 +446,73 @@ static void testValidatorRules() {
         auto tooLong = v.validateMessage(string(201, 'x'));
         CHECK(!tooLong.has_value());
         CHECK(tooLong.error() == Error::TooLong);
+
+        // the specification sets a 5-character minimum
+        auto tooShort = v.validateMessage("hi");
+        CHECK(!tooShort.has_value());
+        CHECK(tooShort.error() == Error::TooShort);
     }
 
-    SECTION("Validator: validateCommitID");
+    SECTION("Validator: validateAuthor enforces 3-50 characters");
     {
-        CHECK(v.validateCommitID("3").has_value());
-        CHECK(v.validateCommitID("a1b2c3d").has_value());
+        CHECK(v.validateAuthor("Bao").has_value());
+
+        auto tooShort = v.validateAuthor("Bo");
+        CHECK(!tooShort.has_value());
+        CHECK(tooShort.error() == Error::TooShort);
+
+        auto tooLong = v.validateAuthor(string(51, 'a'));
+        CHECK(!tooLong.has_value());
+        CHECK(tooLong.error() == Error::TooLong);
+
+        CHECK(!v.validateAuthor("12345").has_value());   // no alphabetic character
+    }
+
+    SECTION("Validator: validateCommitID enforces the COMMIT-0001 format");
+    {
+        CHECK(v.validateCommitID("COMMIT-0001").has_value());
+        CHECK(v.validateCommitID("COMMIT-9999").has_value());
+        CHECK(v.validateCommitID("COMMIT-10000").has_value());   // past 4 digits
+
         CHECK(!v.validateCommitID("").has_value());
+        CHECK(!v.validateCommitID("3").has_value());             // bare counter
+        CHECK(!v.validateCommitID("a1b2c3d").has_value());       // arbitrary text
+        CHECK(!v.validateCommitID("commit-0001").has_value());   // wrong case
+        CHECK(!v.validateCommitID("COMMIT-001").has_value());    // too few digits
+        CHECK(!v.validateCommitID("COMMIT-0001x").has_value());  // trailing junk
         CHECK(!v.validateCommitID("has space").has_value());
+    }
+
+    SECTION("Validator: formatCommitID produces spec-format ids");
+    {
+        CHECK(Validator::formatCommitID(0)    == "COMMIT-0001");
+        CHECK(Validator::formatCommitID(1)    == "COMMIT-0002");
+        CHECK(Validator::formatCommitID(41)   == "COMMIT-0042");
+        CHECK(Validator::formatCommitID(9999) == "COMMIT-10000");
+        // every generated id passes its own validator
+        CHECK(v.validateCommitID(Validator::formatCommitID(7)).has_value());
+    }
+
+    SECTION("Validator: validateStatusTransition guards the file lifecycle");
+    {
+        // Modified must pass through Staged before it can be Committed
+        CHECK(!v.validateStatusTransition(Status::Modified, Status::Staged).has_value());
+        CHECK(v.validateStatusTransition(Status::Modified, Status::Committed).has_value());
+
+        // a staged file may be committed, or edited back to Modified
+        CHECK(!v.validateStatusTransition(Status::Staged, Status::Committed).has_value());
+        CHECK(!v.validateStatusTransition(Status::Staged, Status::Modified).has_value());
+
+        // editing a committed file again is fine; committing it twice is not
+        CHECK(!v.validateStatusTransition(Status::Committed, Status::Modified).has_value());
+        CHECK(v.validateStatusTransition(Status::Committed, Status::Staged).has_value());
+
+        // staying put is never an error
+        CHECK(!v.validateStatusTransition(Status::Staged, Status::Staged).has_value());
+
+        // nothing moves into or out of Error
+        CHECK(v.validateStatusTransition(Status::Error, Status::Staged).has_value());
+        CHECK(v.validateStatusTransition(Status::Modified, Status::Error).has_value());
     }
 }
 
@@ -985,7 +1048,7 @@ static void testAppController() {
         manager.initRepository("find-repo", TMP_DIR);
         manager.addFile(tmpPath("find.txt"));
         manager.stageFile(tmpPath("find.txt"));
-        manager.commitChanges("c", "Bao");
+        manager.commitChanges("first commit", "Bao");
 
         CHECK(manager.isTracked(tmpPath("find.txt")));
         CHECK(!manager.isTracked("nope.txt"));
@@ -1024,7 +1087,7 @@ static void testAppController() {
         manager.initRepository("refresh-repo", TMP_DIR);
         manager.addFile(tmpPath("refresh.txt"));
         manager.stageFile(tmpPath("refresh.txt"));
-        manager.commitChanges("v1", "Bao");
+        manager.commitChanges("version one", "Bao");
         CHECK(manager.getFileStatus(tmpPath("refresh.txt")) == "Committed");
 
         writeTmpFile("refresh.txt", "after\n");
@@ -1339,6 +1402,133 @@ static void testScaleAndEdgeCases() {
         // but re-reading it from disk now fails cleanly
         CHECK(!manager.refreshFile("vanishing.txt"));
         CHECK(manager.lastMessage().find("Cannot re-read") != string::npos);
+    }
+
+    /* The four cases below are named explicitly in the specification's
+     * "Additional Edge Cases" section and were the last gaps in the suite.
+     */
+    SECTION("Edge: a read-only file is tracked and committed without error");
+    {
+        writeTmpFile("readonly.txt", "cannot be written\n");
+
+        // drop the owner write bit — the file is still readable
+        error_code ignored;
+        filesystem::permissions(diskPath("readonly.txt"),
+                                filesystem::perms::owner_write,
+                                filesystem::perm_options::remove, ignored);
+
+        AppController manager;
+        manager.initRepository("readonly-repo", TMP_DIR);
+
+        // reading a read-only file is fine
+        CHECK(manager.addFile("readonly.txt"));
+        CHECK(manager.getFiles()[0].getContent() == "cannot be written\n");
+        CHECK(manager.stageFile("readonly.txt"));
+        CHECK(manager.commitChanges("commit a read-only file", "Bao"));
+
+        // writing back over it must fail cleanly rather than throw
+        const bool wrote = manager.writeFileToDisk("readonly.txt");
+        CHECK(wrote || manager.lastMessage().find("Could not write") != string::npos);
+
+        // restore the bit so the scratch directory can be deleted afterwards
+        filesystem::permissions(diskPath("readonly.txt"),
+                                filesystem::perms::owner_write,
+                                filesystem::perm_options::add, ignored);
+    }
+
+    SECTION("Edge: invalid character encoding is carried through, not crashed on");
+    {
+        // bytes that are not valid UTF-8, including an embedded NUL
+        string rawBytes = "valid text\n";
+        rawBytes += static_cast<char>(0xFF);
+        rawBytes += static_cast<char>(0xFE);
+        rawBytes += static_cast<char>(0x00);
+        rawBytes += static_cast<char>(0xC3);
+        rawBytes += "\ntrailing\n";
+
+        filesystem::create_directories(TMP_DIR);
+        {
+            ofstream out(diskPath("binary.txt"), ios::binary);
+            out.write(rawBytes.data(), static_cast<streamsize>(rawBytes.size()));
+        }
+
+        AppController manager;
+        manager.initRepository("encoding-repo", TMP_DIR);
+
+        CHECK(manager.addFile("binary.txt"));
+        CHECK(manager.stageFile("binary.txt"));
+        CHECK(manager.commitChanges("commit odd bytes", "Bao"));
+
+        // it survives a save/load round trip without throwing
+        const string saveFile = diskPath("encoding.dat");
+        CHECK(manager.saveRepository(saveFile));
+
+        AppController reloaded;
+        CHECK(reloaded.loadRepository(saveFile));
+        CHECK(reloaded.getTrackedFileCount() == 1);
+    }
+
+    SECTION("Edge: duplicate commit ids loaded from a file are detected");
+    {
+        writeTmpFile("dup.txt", "content\n");
+        AppController manager;
+        manager.initRepository("dup-repo", TMP_DIR);
+        manager.addFile("dup.txt");
+        manager.stageFile("dup.txt");
+        CHECK(manager.commitChanges("first commit", "Bao"));
+
+        /* The file has to change before it can be staged again: a Committed file
+         * goes back to Modified first, which is the lifecycle rule
+         * validateStatusTransition() enforces.
+         */
+        writeTmpFile("dup.txt", "changed content\n");
+        CHECK(manager.refreshFile("dup.txt"));
+        CHECK(manager.stageFile("dup.txt"));
+        CHECK(manager.commitChanges("second commit", "Bao"));
+
+        const string saveFile = diskPath("dup.dat");
+        CHECK(manager.saveRepository(saveFile));
+
+        AppController reloaded;
+        CHECK(reloaded.loadRepository(saveFile));
+
+        // ids generated by the app are unique and keep the spec format
+        set<string> ids;
+        for (const auto& commit : reloaded.getCommits()) {
+            ids.insert(commit->getCommitID());
+            CHECK(Validator().validateCommitID(commit->getCommitID()).has_value());
+        }
+        CHECK(ids.size() == reloaded.getCommits().size());
+        CHECK(ids.count("COMMIT-0001") == 1);
+        CHECK(ids.count("COMMIT-0002") == 1);
+    }
+
+    SECTION("Edge: a commit referencing a file that no longer exists is handled");
+    {
+        writeTmpFile("gone.txt", "here now\n");
+        AppController manager;
+        manager.initRepository("gone-repo", TMP_DIR);
+        manager.addFile("gone.txt");
+        manager.stageFile("gone.txt");
+        CHECK(manager.commitChanges("commit before deletion", "Bao"));
+        const string id = manager.getCommits()[0]->getCommitID();
+
+        // the working file disappears, but the commit still references it
+        error_code ignored;
+        filesystem::remove(diskPath("gone.txt"), ignored);
+
+        // the snapshot is in memory, so reading history still works
+        string diff;
+        CHECK(manager.diffFileAgainstCommit(id, "gone.txt", diff));
+        CHECK(manager.restoreFile(id, "gone.txt"));
+
+        // and the snapshot can be written back out, recreating the file
+        CHECK(manager.writeFileToDisk("gone.txt"));
+        CHECK(readTmpFile("gone.txt") == "here now\n");
+
+        // a file the commit never knew about is refused, not invented
+        CHECK(!manager.restoreFile(id, "never-existed.txt"));
+        CHECK(manager.lastMessage().find("not tracked") != string::npos);
     }
 
     SECTION("Edge: special characters in a search do not crash the application");
